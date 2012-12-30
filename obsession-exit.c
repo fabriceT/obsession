@@ -25,21 +25,6 @@
 #include "obsession.h"
 #include "dbus-interface.h"
 
-static gboolean poweroff;
-static gboolean suspend;
-static gboolean hibernate;
-static gboolean reboot;
-static gboolean capabilities;
-
-static GOptionEntry opt_entries[] =
-{
-    { "poweroff", 'p', 0, G_OPTION_ARG_NONE, &poweroff, "Shutdown the computer", NULL },
-    { "suspend", 's', 0, G_OPTION_ARG_NONE, &suspend, "Suspend the computer", NULL },
-    { "hibernate", 'H', 0, G_OPTION_ARG_NONE, &hibernate, "Go to Hibernation", NULL },
-    { "reboot", 'r', 0, G_OPTION_ARG_NONE, &reboot, "Restart the computer", NULL },
-    { "capabilities", 'c', 0, G_OPTION_ARG_NONE, &capabilities, "List power capabilities", NULL },
-    { NULL }
-};
 
 void get_capabilities (HandlerContext* handler_context)
 {
@@ -72,6 +57,20 @@ int main(int argc, char* argv[])
 {
 	HandlerContext handler_context;
 	GError *err = NULL;
+	gboolean poweroff;
+	gboolean suspend;
+	gboolean hibernate;
+	gboolean reboot;
+	gboolean capabilities;
+
+	GOptionEntry opt_entries[] = {
+		{ "poweroff",     'p', 0, G_OPTION_ARG_NONE, &poweroff,     "Shutdown the computer", NULL },
+		{ "suspend",      's', 0, G_OPTION_ARG_NONE, &suspend,      "Suspend the computer", NULL },
+		{ "hibernate",    'H', 0, G_OPTION_ARG_NONE, &hibernate,    "Go to Hibernation", NULL },
+		{ "reboot",       'r', 0, G_OPTION_ARG_NONE, &reboot,       "Restart the computer", NULL },
+		{ "capabilities", 'c', 0, G_OPTION_ARG_NONE, &capabilities, "List power capabilities", NULL },
+		{ NULL }
+	};
 
 	g_type_init ();
 	initialize_context (&handler_context);
