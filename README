@@ -1,0 +1,25 @@
+What are these programs for?
+
+* obsession-logout,
+  displays a dialog asking you if you want to quit the session, power off,
+  suspend or hibernate the computer.
+
+* obsession-exit,
+  this is the command line version of obsession-logout.
+
+* xdg-autostart,
+  start automaticaly programs defined in /etc/xdg/autostart and ~/.config/autostart
+  (see FreeDesktop specification for autostarted programs). Add it to your
+  ~/.openbox/autostart file and manage your session with lxsession-edit or other.
+
+
+Why?
+
+I'm a big fan of Openbox and LXDE, but I don't need all the features of the
+last one. So starting from LXDE project and keeping what is useful (to me)
+was a good start to have a desktop easy to manage and very lightweight.
+
+
+This is so old school!
+
+But it works with ConsoleKit, UPower and systemd.

@@ -1,0 +1,27 @@
+## Configuring
+
+To configure the destination directory:
+
+	make configure PREFIX=/your/dir
+
+By default, all files will be installed in /usr/local/ directory (actually
+/usr/local/bin and /usr/local/share/locale).
+
+## Building and installing
+
+Type
+
+	make
+	make install
+
+or if you wish to copy to another directory first, aka I'm building a package.
+
+	make
+	make install PREFIX=/your/dir
+
+
+## Dependencies
+	* gtk+ 2
+	* glib 2
+	* dbus
+	* xlock (optional)
