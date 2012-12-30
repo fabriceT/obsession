@@ -43,10 +43,14 @@
 enum {
 	NONE = 0,
 	UPOWER = 1,
-	GDM = 1,
 	CONSOLEKIT = 2,
-	KDM = 2,
 	SYSTEMD = 4,
+};
+
+enum {
+	GDM,
+	KDM,
+	LIGHTDM
 };
 
 typedef struct {
@@ -218,6 +222,11 @@ void initialize_context (HandlerContext* handler_context)
 	{
 		handler_context->switch_user = KDM;
 	}
+	/* If we are under LightDM, its "Switch User" is available. */
+	else if (verify_running("lightdm", "dm-tool"))
+	{
+		handler_context->switch_user = LIGHTDM;
+	}
 	else
 		handler_context->switch_user = NONE;
 }
@@ -318,6 +327,8 @@ static void switch_user_clicked(GtkButton * button, HandlerContext * handler_con
 		g_spawn_command_line_sync("gdmflexiserver --startnew", NULL, NULL, NULL, NULL);
 	else if (handler_context->switch_user == KDM)
 		g_spawn_command_line_sync("kdmctl reserve", NULL, NULL, NULL, NULL);
+	else if (handler_context->switch_user == LIGHTDM)
+		g_spawn_command_line_sync("dm-tool switch-to-greeter", NULL, NULL, NULL, NULL);
 	gtk_main_quit();
 }
 
