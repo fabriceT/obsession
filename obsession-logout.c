@@ -18,50 +18,15 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <config.h>
+
 #include <locale.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <glib/gi18n.h>
-#include <signal.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <unistd.h>
 
-#include <X11/Xatom.h>
-#include <X11/Xlib.h>
-
+#include "config.h"
 #include "dbus-interface.h"
-
-enum {
-	NONE = 0,
-	UPOWER = 1,
-	CONSOLEKIT = 2,
-	SYSTEMD = 4,
-};
-
-enum {
-	GDM,
-	KDM,
-	LIGHTDM
-};
-
-typedef struct {
-	GPid lxsession_pid;			/* Process ID of lxsession */
-	GtkWidget *error_label;		/* Text of an error, if we get one */
-	int shutdown;
-	int reboot;
-	int hibernate;
-	int suspend;
-	int switch_user;
-} HandlerContext;
+#include "obsession.h"
 
 /* Command parameters. */
 static char * prompt = NULL;
@@ -77,7 +42,6 @@ static GOptionEntry opt_entries[] =
 };
 
 
-static gboolean lock_screen(void);
 static void logout_clicked(GtkButton * button, HandlerContext * handler_context);
 static void shutdown_clicked(GtkButton * button, HandlerContext * handler_context);
 static void reboot_clicked(GtkButton * button, HandlerContext * handler_context);
@@ -89,147 +53,6 @@ static GtkPositionType get_banner_position(void);
 static GdkPixbuf * get_background_pixbuf(void);
 gboolean expose_event(GtkWidget * widget, GdkEventExpose * event, GdkPixbuf * pixbuf);
 
-/* Try to run xlock command in order to lock the screen, return TRUE on
- * success, FALSE if command execution failed
- */
-static gboolean lock_screen(void)
-{
-	if (!g_spawn_command_line_async("xlock -mode blank", NULL))
-	{
-		return TRUE;
-	}
-	return FALSE;
-}
-
-/* Verify that a program is running and that an executable is available. */
-gboolean verify_running(const char * display_manager, const char * executable)
-{
-	/* See if the executable we need to run is in the path. */
-	gchar * full_path = g_find_program_in_path(executable);
-	if (full_path != NULL)
-	{
-		g_free(full_path);
-
-		/* Form the filespec of the pid file for the display manager. */
-		char buffer[PATH_MAX];
-		sprintf(buffer, "/var/run/%s.pid", display_manager);
-
-		/* Open the pid file. */
-		int fd = open(buffer, O_RDONLY);
-		if (fd >= 0)
-		{
-			/* Pid file exists.  Read it. */
-			ssize_t length = read(fd, buffer, sizeof(buffer));
-			close(fd);
-			if (length > 0)
-			{
-				/* Null terminate the buffer and convert the pid. */
-				buffer[length] = '\0';
-				pid_t pid = atoi(buffer);
-				if (pid > 0)
-				{
-					/* Form the filespec of the command line file under /proc.
-					 * This is Linux specific.  Should be conditionalized to the appropriate /proc layout for
-					 * other systems.  Your humble developer has no way to test on other systems. */
-					sprintf(buffer, "/proc/%d/cmdline", pid);
-
-					/* Open the file. */
-					int fd = open(buffer, O_RDONLY);
-					if (fd >= 0)
-					{
-						/* Read the command line. */
-						ssize_t length = read(fd, buffer, sizeof(buffer));
-						close(fd);
-						if (length > 0)
-						{
-							/* Null terminate the buffer and look for the display manager name in the command.
-							 * If found, return success. */
-							buffer[length] = '\0';
-							if (strstr(buffer, display_manager) != NULL)
-								return TRUE;
-						}
-					}
-				}
-			}
-		}
-	}
-	return FALSE;
-}
-
-void initialize_context (HandlerContext* handler_context)
-{
-	memset(handler_context, 0, sizeof(handler_context));
-
-	if (dbus_systemd_CanPowerOff())
-	{
-		handler_context->shutdown = SYSTEMD;
-	}
-	else if (dbus_ConsoleKit_CanStop())
-	{
-		handler_context->shutdown = CONSOLEKIT;
-	}
-	else
-		handler_context->shutdown = NONE;
-
-
-	if (dbus_systemd_CanReboot())
-	{
-		handler_context->reboot = SYSTEMD;
-	}
-	else if (dbus_ConsoleKit_CanRestart())
-	{
-		handler_context->reboot = CONSOLEKIT;
-	}
-	else
-	{
-		handler_context->reboot = NONE;
-	}
-
-	if (dbus_systemd_CanSuspend())
-	{
-		handler_context->suspend = SYSTEMD;
-	}
-	else if (dbus_UPower_CanSuspend())
-	{
-		handler_context->suspend = UPOWER;
-	}
-	else
-	{
-		handler_context->suspend = NONE;
-	}
-
-
-	if (dbus_systemd_CanHibernate())
-	{
-		handler_context->hibernate = SYSTEMD;
-	}
-	else if (dbus_UPower_CanHibernate())
-	{
-		handler_context->hibernate = UPOWER;
-	}
-	else
-	{
-		handler_context->hibernate = NONE;
-	}
-
-	/* If we are under GDM, its "Switch User" is available. */
-	if (verify_running("gdm", "gdmflexiserver"))
-	{
-		handler_context->switch_user = GDM;
-	}
-	/* If we are under KDM, its "Switch User" is available. */
-	else if (verify_running("kdm", "kdmctl"))
-	{
-		handler_context->switch_user = KDM;
-	}
-	/* If we are under LightDM, its "Switch User" is available. */
-	else if (verify_running("lightdm", "dm-tool"))
-	{
-		handler_context->switch_user = LIGHTDM;
-	}
-	else
-		handler_context->switch_user = NONE;
-}
 
 /* Handler for "clicked" signal on Logout button. */
 static void logout_clicked(GtkButton * button, HandlerContext * handler_context)
@@ -245,10 +68,7 @@ static void shutdown_clicked(GtkButton * button, HandlerContext * handler_contex
 	GError *err = NULL;
 	gtk_label_set_text(GTK_LABEL(handler_context->error_label), NULL);
 
-	if (handler_context->shutdown == SYSTEMD)
-		dbus_systemd_PowerOff(&err);
-	else if (handler_context->shutdown == CONSOLEKIT)
-		dbus_ConsoleKit_Stop(&err);
+	system_poweroff (handler_context, err);
 
 	if (err)
 	{
@@ -264,10 +84,7 @@ static void reboot_clicked(GtkButton * button, HandlerContext * handler_context)
 	GError *err = NULL;
 	gtk_label_set_text(GTK_LABEL(handler_context->error_label), NULL);
 
-	if (handler_context->reboot == SYSTEMD)
-		dbus_systemd_Reboot(&err);
-	else if (handler_context->reboot == CONSOLEKIT)
-		dbus_ConsoleKit_Restart(&err);
+	system_reboot (handler_context, err);
 
 	if (err)
 	{
@@ -283,11 +100,7 @@ static void suspend_clicked(GtkButton * button, HandlerContext * handler_context
 	GError *err = NULL;
 	gtk_label_set_text(GTK_LABEL(handler_context->error_label), NULL);
 
-	lock_screen();
-	if (handler_context->suspend == SYSTEMD)
-		dbus_systemd_Suspend(&err);
-	else if (handler_context->suspend == UPOWER)
-		dbus_UPower_Suspend(&err);
+	system_suspend (handler_context, err);
 
 	if (err)
 	{
@@ -303,11 +116,7 @@ static void hibernate_clicked(GtkButton * button, HandlerContext * handler_conte
 	GError *err = NULL;
 	gtk_label_set_text(GTK_LABEL(handler_context->error_label), NULL);
 
-	lock_screen();
-	if (handler_context->hibernate == SYSTEMD)
-		dbus_systemd_Hibernate(&err);
-	else if (handler_context->hibernate == UPOWER)
-		dbus_UPower_Hibernate(&err);
+	system_hibernate (handler_context, err);
 
 	if (err)
 	{
@@ -321,14 +130,7 @@ static void hibernate_clicked(GtkButton * button, HandlerContext * handler_conte
 static void switch_user_clicked(GtkButton * button, HandlerContext * handler_context)
 {
 	gtk_label_set_text(GTK_LABEL(handler_context->error_label), NULL);
-
-	lock_screen();
-	if (handler_context->switch_user == GDM)
-		g_spawn_command_line_sync("gdmflexiserver --startnew", NULL, NULL, NULL, NULL);
-	else if (handler_context->switch_user == KDM)
-		g_spawn_command_line_sync("kdmctl reserve", NULL, NULL, NULL, NULL);
-	else if (handler_context->switch_user == LIGHTDM)
-		g_spawn_command_line_sync("dm-tool switch-to-greeter", NULL, NULL, NULL, NULL);
+	system_user_switch (handler_context);
 	gtk_main_quit();
 }
 

@@ -22,12 +22,12 @@ all: obsession-exit obsession-logout xdg-autostart $(I18N_MO)
 	@echo "Compiling $<"
 	@gcc -o $@ -c $< $(CFLAGS)
 
-obsession-exit: obsession-exit.o dbus-interface.o config.h
+obsession-exit: obsession-exit.o dbus-interface.o obsession-common.o config.h
 	@echo "Building $@"
 	@$(CC) -o $@ $^ $(LIBS)
 	@strip -s $@
 
-obsession-logout: obsession-logout.o dbus-interface.o config.h
+obsession-logout: obsession-logout.o dbus-interface.o obsession-common.o config.h
 	@echo "Building $@"
 	@$(CC) -o $@ $^ $(LIBS)
 	@strip -s $@
