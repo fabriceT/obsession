@@ -342,7 +342,7 @@ int main(int argc, char * argv[])
 	gtk_box_pack_start(GTK_BOX(controls), label, FALSE, FALSE, 4);
 
 	/* Create the Shutdown button. */
-	if (handler_context.shutdown)
+	if (handler_context.poweroff)
 	{
 		GtkWidget * shutdown_button = gtk_button_new_with_mnemonic(_("Sh_utdown"));
 		GtkWidget * image = gtk_image_new_from_icon_name("system-shutdown", GTK_ICON_SIZE_BUTTON);

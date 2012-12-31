@@ -29,7 +29,7 @@
 void get_capabilities (HandlerContext* handler_context)
 {
 	g_print ("Capabilities:\n");
-	if (handler_context->shutdown != NONE)
+	if (handler_context->poweroff != NONE)
 	{
 		g_print ("  Shutdown\n");
 	}
