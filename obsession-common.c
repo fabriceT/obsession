@@ -195,7 +195,7 @@ void system_hibernate (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
-			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to hibernate");
+			err = g_error_new (OBSESSION_ERROR, HIBERNATE_ERROR, "Don't know how to hibernate");
 			break;
 	}
 }
@@ -213,7 +213,7 @@ void system_reboot (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
-			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to reboot");
+			err = g_error_new (OBSESSION_ERROR, REBOOT_ERROR, "Don't know how to reboot");
 			break;
 	}
 }
@@ -231,7 +231,7 @@ void system_poweroff (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
-			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to shutdown");
+			err = g_error_new (OBSESSION_ERROR, POWEROFF_ERROR, "Don't know how to shutdown");
 			break;
 	}
 }
