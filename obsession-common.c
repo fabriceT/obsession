@@ -243,7 +243,7 @@ void system_user_switch (HandlerContext* handler_context)
 			g_spawn_command_line_sync("kdmctl reserve", NULL, NULL, NULL, NULL);
 			break;
 
-		case GDM:
+		case LIGHTDM:
 			lock_screen();
 			g_spawn_command_line_sync("dm-tool switch-to-greeter", NULL, NULL, NULL, NULL);
 			break;
