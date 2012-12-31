@@ -159,46 +159,97 @@ gboolean verify_running(const char * display_manager, const char * executable)
 
 void system_suspend (HandlerContext* handler_context, GError *err)
 {
-	lock_screen();
-	if (handler_context->suspend == SYSTEMD)
-		dbus_systemd_Suspend(&err);
-	else if (handler_context->suspend == UPOWER)
-		dbus_UPower_Suspend(&err);
+	switch (handler_context->suspend)
+	{
+		case SYSTEMD:
+			lock_screen();
+			dbus_systemd_Suspend (&err);
+			break;
+
+		case UPOWER:
+			lock_screen();
+			dbus_UPower_Suspend (&err);
+			break;
+
+		default:
+			break;
+	}
 }
 
 void system_hibernate (HandlerContext* handler_context, GError *err)
 {
-	lock_screen();
-	if (handler_context->hibernate == SYSTEMD)
-		dbus_systemd_Hibernate(&err);
-	else if (handler_context->hibernate == UPOWER)
-		dbus_UPower_Hibernate(&err);
+	switch (handler_context->hibernate)
+	{
+		case SYSTEMD:
+			lock_screen();
+			dbus_systemd_Hibernate (&err);
+			break;
+
+		case UPOWER:
+			lock_screen();
+			dbus_UPower_Hibernate (&err);
+			break;
+
+		default:
+			break;
+	}
 }
 
 void system_reboot (HandlerContext* handler_context, GError *err)
 {
-	if (handler_context->reboot == SYSTEMD)
-		dbus_systemd_Reboot(&err);
-	else if (handler_context->reboot == CONSOLEKIT)
-		dbus_ConsoleKit_Restart(&err);
+	switch (handler_context->reboot)
+	{
+		case SYSTEMD:
+			dbus_systemd_Reboot (&err);
+			break;
+
+		case CONSOLEKIT:
+			dbus_ConsoleKit_Restart (&err);
+			break;
+
+		default:
+			break;
+	}
 }
 
 void system_poweroff (HandlerContext* handler_context, GError *err)
 {
-	if (handler_context->shutdown == SYSTEMD)
-		dbus_systemd_PowerOff(&err);
-	else if (handler_context->shutdown == CONSOLEKIT)
-		dbus_ConsoleKit_Stop(&err);
+	switch (handler_context->shutdown)
+	{
+		case SYSTEMD:
+			dbus_systemd_PowerOff (&err);
+			break;
+
+		case CONSOLEKIT:
+			dbus_ConsoleKit_Stop (&err);
+			break;
+
+		default:
+			break;
+	}
 }
 
 void system_user_switch (HandlerContext* handler_context)
 {
-	lock_screen();
-	if (handler_context->switch_user == GDM)
-		g_spawn_command_line_sync("gdmflexiserver --startnew", NULL, NULL, NULL, NULL);
-	else if (handler_context->switch_user == KDM)
-		g_spawn_command_line_sync("kdmctl reserve", NULL, NULL, NULL, NULL);
-	else if (handler_context->switch_user == LIGHTDM)
-		g_spawn_command_line_sync("dm-tool switch-to-greeter", NULL, NULL, NULL, NULL);
+	switch (handler_context->switch_user)
+	{
+		case GDM:
+			lock_screen();
+			g_spawn_command_line_sync("gdmflexiserver --startnew", NULL, NULL, NULL, NULL);
+			break;
+
+		case KDM:
+			lock_screen();
+			g_spawn_command_line_sync("kdmctl reserve", NULL, NULL, NULL, NULL);
+			break;
+
+		case GDM:
+			lock_screen();
+			g_spawn_command_line_sync("dm-tool switch-to-greeter", NULL, NULL, NULL, NULL);
+			break;
+
+		default:
+			break;
+	}
 }
 
