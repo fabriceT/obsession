@@ -24,7 +24,7 @@ enum {
 
 typedef struct {
 	GtkWidget *error_label;		/* Text of an error, if we get one */
-	int shutdown;
+	int poweroff;
 	int reboot;
 	int hibernate;
 	int suspend;

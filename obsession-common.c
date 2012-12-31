@@ -21,14 +21,14 @@ void initialize_context (HandlerContext* handler_context)
 	/* Is poweroff controlled by systemd or ConsolKit? */
 	if (dbus_systemd_CanPowerOff())
 	{
-		handler_context->shutdown = SYSTEMD;
+		handler_context->poweroff = SYSTEMD;
 	}
 	else if (dbus_ConsoleKit_CanStop())
 	{
-		handler_context->shutdown = CONSOLEKIT;
+		handler_context->poweroff = CONSOLEKIT;
 	}
 	else
-		handler_context->shutdown = NONE;
+		handler_context->poweroff = NONE;
 
 	/* Is reboot controlled by systemd or ConsolKit? */
 	if (dbus_systemd_CanReboot())
@@ -220,7 +220,7 @@ void system_reboot (HandlerContext* handler_context, GError *err)
 
 void system_poweroff (HandlerContext* handler_context, GError *err)
 {
-	switch (handler_context->shutdown)
+	switch (handler_context->poweroff)
 	{
 		case SYSTEMD:
 			dbus_systemd_PowerOff (&err);
