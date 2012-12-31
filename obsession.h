@@ -13,6 +13,15 @@ enum {
 	LIGHTDM
 };
 
+enum {
+	SHUTDOWN_ERROR,
+	REBOOT_ERROR,
+	HIBERNATE_ERROR,
+	SUSPEND_ERROR,
+	SWITCH_USER_ERROR
+};
+
+
 typedef struct {
 	GtkWidget *error_label;		/* Text of an error, if we get one */
 	int shutdown;

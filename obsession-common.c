@@ -5,6 +5,7 @@
 #include "obsession.h"
 #include "dbus-interface.h"
 
+static GQuark OBSESSION_ERROR;
 
 /*
  * Set up a context containing informations about how
@@ -14,6 +15,8 @@
 void initialize_context (HandlerContext* handler_context)
 {
 	memset(handler_context, 0, sizeof(handler_context));
+
+	OBSESSION_ERROR = g_quark_from_string ("__obsession_error__");
 
 	/* Is poweroff controlled by systemd or ConsolKit? */
 	if (dbus_systemd_CanPowerOff())
@@ -172,6 +175,7 @@ void system_suspend (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
+			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to suspend");
 			break;
 	}
 }
@@ -191,6 +195,7 @@ void system_hibernate (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
+			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to hibernate");
 			break;
 	}
 }
@@ -208,6 +213,7 @@ void system_reboot (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
+			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to reboot");
 			break;
 	}
 }
@@ -225,6 +231,7 @@ void system_poweroff (HandlerContext* handler_context, GError *err)
 			break;
 
 		default:
+			err = g_error_new (OBSESSION_ERROR, SUSPEND_ERROR, "Don't know how to shutdown");
 			break;
 	}
 }
