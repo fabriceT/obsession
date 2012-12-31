@@ -5,10 +5,17 @@
 #include "obsession.h"
 #include "dbus-interface.h"
 
+
+/*
+ * Set up a context containing informations about how
+ * poweroff, suspend, hibernate and reboot are handled
+ * and which graphic login manager is currently used.
+ */
 void initialize_context (HandlerContext* handler_context)
 {
 	memset(handler_context, 0, sizeof(handler_context));
 
+	/* Is poweroff controlled by systemd or ConsolKit? */
 	if (dbus_systemd_CanPowerOff())
 	{
 		handler_context->shutdown = SYSTEMD;
@@ -20,7 +27,7 @@ void initialize_context (HandlerContext* handler_context)
 	else
 		handler_context->shutdown = NONE;
 
-
+	/* Is reboot controlled by systemd or ConsolKit? */
 	if (dbus_systemd_CanReboot())
 	{
 		handler_context->reboot = SYSTEMD;
@@ -34,6 +41,7 @@ void initialize_context (HandlerContext* handler_context)
 		handler_context->reboot = NONE;
 	}
 
+	/* Is suspend controlled by systemd or UPower? */
 	if (dbus_systemd_CanSuspend())
 	{
 		handler_context->suspend = SYSTEMD;
@@ -47,7 +55,7 @@ void initialize_context (HandlerContext* handler_context)
 		handler_context->suspend = NONE;
 	}
 
-
+	/* Is hibernation controlled by systemd or UPower? */
 	if (dbus_systemd_CanHibernate())
 	{
 		handler_context->hibernate = SYSTEMD;
@@ -86,6 +94,7 @@ void initialize_context (HandlerContext* handler_context)
  */
 gboolean lock_screen(void)
 {
+	// TODO: use of `gnome-screensaver-command -l`
 	if (!g_spawn_command_line_async("xlock -mode blank", NULL))
 	{
 		return TRUE;
