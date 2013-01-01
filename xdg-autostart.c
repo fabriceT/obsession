@@ -27,7 +27,7 @@ static char *de_name = "Openbox";
 
 static GOptionEntry opt_entries[] =
 {
-	{ "desktop", 'd', 0, G_OPTION_ARG_STRING, &de_name, ("Custom Desktop Name"), ("Desktop Name") },
+	{ "desktop", 'd', 0, G_OPTION_ARG_STRING, &de_name, ("Custom Desktop Name"), ("Desktop_Name") },
 	{ NULL }
 };
 
