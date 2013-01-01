@@ -50,6 +50,12 @@ void get_capabilities (HandlerContext* handler_context)
 		g_print ("  Hibernate\n");
 
 	}
+
+	if (handler_context->switch_user != NONE)
+	{
+		g_print ("  User switch\n");
+	}
+
 }
 
 

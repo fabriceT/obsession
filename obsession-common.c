@@ -72,8 +72,13 @@ void initialize_context (HandlerContext* handler_context)
 		handler_context->hibernate = NONE;
 	}
 
+	/* If we are under LXDM, its "Switch User" is available. */
+	if (verify_running("lxdm", "lxdm"))
+	{
+		handler_context->switch_user = LXDM;
+	}
 	/* If we are under GDM, its "Switch User" is available. */
-	if (verify_running("gdm", "gdmflexiserver"))
+	else if (verify_running("gdm", "gdmflexiserver"))
 	{
 		handler_context->switch_user = GDM;
 	}
@@ -240,6 +245,10 @@ void system_user_switch (HandlerContext* handler_context)
 {
 	switch (handler_context->switch_user)
 	{
+		case LXDM:
+			g_spawn_command_line_sync("lxdm -c USER_SWITCH", NULL, NULL, NULL, NULL);
+			break;
+
 		case GDM:
 			lock_screen();
 			g_spawn_command_line_sync("gdmflexiserver --startnew", NULL, NULL, NULL, NULL);

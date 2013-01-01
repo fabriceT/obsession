@@ -10,7 +10,8 @@ enum {
 	SYSTEMD,
 	GDM,
 	KDM,
-	LIGHTDM
+	LIGHTDM,
+	LXDM
 };
 
 enum {
