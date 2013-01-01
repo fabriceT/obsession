@@ -59,5 +59,9 @@ install: all
 	# mo files.
 	for f in $(I18N_MO) ; do \
 		F=`basename $$f | sed 's/\.[^\.]*$$//'`;\
-	  install -D -m0644 $$f $(LOCALE_DIR)/$$F/LC_MESSAGES/obsession-logout.mo;\
+		install -D -m0644 $$f $(LOCALE_DIR)/$$F/LC_MESSAGES/obsession-logout.mo;\
+	done
+
+	for f in `ls images/*.png`; do \
+		install -D -m0644 $$f $(PREFIX)/share/obsession/$$f;\
 	done

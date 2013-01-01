@@ -256,7 +256,7 @@ int main(int argc, char * argv[])
 
 
 	/* Make the button images accessible. */
-	/*gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), PACKAGE_DATA_DIR "/lxsession/images"); */
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), PACKAGE_DATA_DIR "/obsession/images");
 
 	/* Get the background pixbuf. */
 	GdkPixbuf * pixbuf = get_background_pixbuf();
