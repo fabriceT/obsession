@@ -42,13 +42,11 @@ void get_capabilities (HandlerContext* handler_context)
 	if (handler_context->suspend != NONE)
 	{
 		g_print ("  Suspend\n");
-
 	}
 
 	if (handler_context->hibernate != NONE)
 	{
 		g_print ("  Hibernate\n");
-
 	}
 
 	if (handler_context->switch_user != NONE)
