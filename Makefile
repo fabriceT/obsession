@@ -6,8 +6,8 @@ LOCALE_DIR =$(PREFIX)/share/locale
 
 # Building flags.
 CFLAGS ?=-march=i686 -mtune=generic -O2 -Wall
-CFLAGS +=`pkg-config --cflags gtk+-2.0 dbus-1 x11` -I.
-LIBS=`pkg-config --libs gtk+-2.0 glib-2.0 dbus-1 x11`
+CFLAGS +=`pkg-config --cflags gtk+-2.0 dbus-1 x11 gio-unix-2.0` -I.
+LIBS=`pkg-config --libs gtk+-2.0 glib-2.0 dbus-1 x11 gio-unix-2.0`
 
 # PO and MO files
 LINGUAS= $(shell ls po/*.po)
