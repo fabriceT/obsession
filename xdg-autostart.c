@@ -23,7 +23,7 @@
 #include <string.h>
 
 static const char DesktopEntry[] = "Desktop Entry";
-static char *de_name = "Openbox";
+static char *de_name = "OPENBOX";
 
 static GOptionEntry opt_entries[] =
 {
