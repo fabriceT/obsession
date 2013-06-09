@@ -36,7 +36,10 @@ class Autostart
 					/* Hidden desktop file don't have to be launched */
 					if (kf.get_boolean ("Desktop Entry", "Hidden"))
 						return;
+				}
+				catch (KeyFileError e) {}
 
+				try {
 					/* Check if the desktop file is launched in current desktop environment */
 					if (kf.has_key ("Desktop Entry", "OnlyShowIn")) {
 						show_list = kf.get_string_list ("Desktop Entry", "OnlyShowIn");
@@ -51,7 +54,6 @@ class Autostart
 						if (found == false)
 							return;
 					}
-
 					/* Check if the desktop file is not launched in current desktop environment */
 					else if (kf.has_key ("Desktop Entry", "NotShowIn")) {
 						show_list = kf.get_string_list ("Desktop Entry", "NotShowIn");
