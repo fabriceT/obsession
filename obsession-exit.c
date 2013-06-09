@@ -61,11 +61,11 @@ int main(int argc, char* argv[])
 {
 	HandlerContext handler_context;
 	GError *err = NULL;
-	gboolean poweroff;
-	gboolean suspend;
-	gboolean hibernate;
-	gboolean reboot;
-	gboolean capabilities;
+	gboolean poweroff = FALSE;
+	gboolean suspend = FALSE;
+	gboolean hibernate = FALSE;
+	gboolean reboot = FALSE;
+	gboolean capabilities = FALSE;
 
 	GOptionEntry opt_entries[] = {
 		{ "poweroff",     'p', 0, G_OPTION_ARG_NONE, &poweroff,     "Shutdown the computer", NULL },
