@@ -149,7 +149,7 @@ class Autostart
 			desktop = args[1];
 		}
 		else {
-			desktop = "OPENBOX";
+			desktop = "Openbox";
 		}
 
 		xdg_autostart ();
