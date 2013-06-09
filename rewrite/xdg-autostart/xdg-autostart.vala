@@ -2,7 +2,7 @@
 
 /*
  * xdg-autostart
- * Copyright (C) 2012 mimas <mimasgpc@free.fr>
+ * Copyright (C) 2012,2013 mimas <mimasgpc@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
