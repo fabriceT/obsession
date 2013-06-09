@@ -33,33 +33,36 @@ class Autostart
 		try {
 			if (kf.load_from_file (filename, KeyFileFlags.NONE)) {
 				try {
+					/* Hidden desktop file don't have to be launched */
 					if (kf.get_boolean ("Desktop Entry", "Hidden"))
 						return;
-				} catch (KeyFileError e) {}
 
-				if (kf.has_key ("Desktop Entry", "OnlyShowIn")) {
-					show_list = kf.get_string_list ("Desktop Entry", "OnlyShowIn");
-					found = false;
-					foreach (string de in show_list) {
-						if (de == desktop) {
-							found = true;
-							break;
+					/* Check if the desktop file is launched in current desktop environment */
+					if (kf.has_key ("Desktop Entry", "OnlyShowIn")) {
+						show_list = kf.get_string_list ("Desktop Entry", "OnlyShowIn");
+						found = false;
+						foreach (string de in show_list) {
+							if (de == desktop) {
+								found = true;
+								break;
+							}
 						}
-					}
-
-					if (found == false)
-						return;
-				}
-				else if (kf.has_key ("Desktop Entry", "NotShowIn")) {
-					show_list = kf.get_string_list ("Desktop Entry", "NotShowIn");
-					foreach (string de in show_list) {
-						if (de == desktop) {
+						/* Current desktop is not found in the OnlyShowIn list */
+						if (found == false)
 							return;
+					}
+
+					/* Check if the desktop file is not launched in current desktop environment */
+					else if (kf.has_key ("Desktop Entry", "NotShowIn")) {
+						show_list = kf.get_string_list ("Desktop Entry", "NotShowIn");
+						foreach (string de in show_list) {
+							if (de == desktop) {
+								return;
+							}
 						}
 					}
-				}
 
-				try {
+					/* Lookup for TryExec file and check if it's found in path */
 					exec = kf.get_string ("Desktop Entry", "TryExec");
 					if (exec != null) {
 						if (!Path.is_absolute (exec)) {
@@ -72,22 +75,21 @@ class Autostart
 							return; // Exec is not executable => exit
 						}
 					}
-				}
-				catch (KeyFileError e) {}
 
-
-				try {
+					/* Find the command line to launch and launch it */
 					exec = kf.get_string ("Desktop Entry", "Exec");
 					try {
 						Process.spawn_command_line_async (exec);
-						stdout.printf ("Launching: %s (%s)\n", exec, key);
-					} catch (SpawnError e) {
-						stdout.printf ("Error: %s\n", e.message);
+						message ("Launching: %s (%s)\n", exec, key);
 					}
-				} catch (KeyFileError e) {}
-
+					catch (SpawnError e) {
+						warning ("Error: %s\n", e.message);
+					}
+				}
+				catch (KeyFileError e) {}
 			}
-		} catch (FileError e) {
+		}
+		catch (FileError e) {
 			stdout.printf ("Error: %s\n", e.message);
 		}
 	}
@@ -105,8 +107,9 @@ class Autostart
 					table.replace (filename, Path.build_filename (dir_path, filename));
 				}
 			}
-		} catch (FileError e) {
-			stdout.printf ("Error: %s\n", e.message);
+		}
+		catch (FileError e) {
+			warning ("Error: %s\n", e.message);
 		}
 	}
 
