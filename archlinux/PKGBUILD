@@ -11,7 +11,7 @@ conflicts=("obsession")
 url=http://code.google.com/p/mimarchlinux/
 license=('GPL')
 depends=('glib2' 'gtk2' 'dbus' 'systemd')
-optdepends=('xlock' 'lxdm' 'gdm')
+optdepends=('xlockmore' 'lxdm' 'gdm')
 source=(hg+https://code.google.com/p/mimarchlinux.obsession/)
 md5sums=('SKIP')
 
