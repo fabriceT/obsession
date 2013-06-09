@@ -21,7 +21,7 @@
 
 class Autostart
 {
-	static string desktop = "LXDE";
+	static string desktop;
 
 	static void
 	launch_file (string key, string filename)	{
@@ -128,6 +128,13 @@ class Autostart
 	}
 
 	static int main (string[] args) {
+		if (args.length > 1) {
+			desktop = args[1];
+		}
+		else {
+			desktop = "OPENBOX";
+		}
+
 		xdg_autostart ();
 		return 0;
 	}
