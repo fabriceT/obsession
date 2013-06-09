@@ -33,9 +33,15 @@ class Autostart
 		try {
 			if (kf.load_from_file (filename, KeyFileFlags.NONE)) {
 				try {
+
+					message ("Processing %s file.", filename);
+
 					/* Hidden desktop file don't have to be launched */
 					if (kf.get_boolean ("Desktop Entry", "Hidden"))
+					{
+						message ("Hidden attribute set, aborting.");
 						return;
+					}
 				}
 				catch (KeyFileError e) {}
 
@@ -52,13 +58,17 @@ class Autostart
 						}
 						/* Current desktop is not found in the OnlyShowIn list */
 						if (found == false)
+						{
+							message ("Not found in OnlyShowIn list, aborting.");
 							return;
+						}
 					}
 					/* Check if the desktop file is not launched in current desktop environment */
 					else if (kf.has_key ("Desktop Entry", "NotShowIn")) {
 						show_list = kf.get_string_list ("Desktop Entry", "NotShowIn");
 						foreach (string de in show_list) {
 							if (de == desktop) {
+								message ("Found in NotShowIn list, aborting.");
 								return;
 							}
 						}
@@ -69,11 +79,13 @@ class Autostart
 					if (exec != null) {
 						if (!Path.is_absolute (exec)) {
 							if (Environment.find_program_in_path (exec) != null) {
+								message ("Can't find %s from TryExec key, aborting.", exec);
 								return; // Exec is not found in path => exit
 							}
 						}
 						else if (!FileUtils.test (exec, FileTest.IS_EXECUTABLE))
 						{
+							message ("%s from TryExec key is not executable, aborting.", exec);
 							return; // Exec is not executable => exit
 						}
 					}
@@ -82,7 +94,7 @@ class Autostart
 					exec = kf.get_string ("Desktop Entry", "Exec");
 					try {
 						Process.spawn_command_line_async (exec);
-						message ("Launching: %s (%s)\n", exec, key);
+						message ("Launching: %s (%s)", exec, key);
 					}
 					catch (SpawnError e) {
 						warning ("Error: %s\n", e.message);
@@ -92,7 +104,7 @@ class Autostart
 			}
 		}
 		catch (FileError e) {
-			stdout.printf ("Error: %s\n", e.message);
+			warning ("Error: %s\n", e.message);
 		}
 	}
 
