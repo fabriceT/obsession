@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2012 Fabrice THIROUX <fabrice.thiroux@free.fr>.
+ * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr>.
  * Copyright (c) 2010 LxDE Developers, see AUTHORS file.
  *
  * This program is free software; you can redistribute it and/or modify

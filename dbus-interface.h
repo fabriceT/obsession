@@ -1,10 +1,12 @@
 /**
+ * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr>.
  * Copyright (c) 2010 LxDE Developers, see the file AUTHORS for details.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation; either version 3 of the License, or any
+ * later version. See http://www.gnu.org/copyleft/lgpl.html the full text
+ * of the license.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of

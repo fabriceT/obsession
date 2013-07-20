@@ -32,9 +32,9 @@ obsession-logout: obsession-logout.o dbus-interface.o obsession-common.o config.
 	@$(CC) -o $@ $^ $(LIBS)
 	@strip -s $@
 
-xdg-autostart: xdg-autostart.o
+xdg-autostart:  autostart/xdg-autostart.vala
 	@echo "Building $@"
-	@$(CC) -o $@ $^ $(LIBS)
+	@valac -o $@ $^
 	@strip -s $@
 
 po/%.mo: po/%.po

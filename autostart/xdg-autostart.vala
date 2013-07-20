@@ -2,11 +2,13 @@
 
 /*
  * xdg-autostart
- * Copyright (C) 2012,2013 mimas <mimasgpc@free.fr>
+ * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr>.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation; version 3.0 only.
+ * by the Free Software Foundation; either version 3 of the License, or any
+ * later version. See http://www.gnu.org/copyleft/lgpl.html the full text
+ * of the license.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -75,18 +77,13 @@ class Autostart
 					}
 
 					/* Lookup for TryExec file and check if it's found in path */
-					exec = kf.get_string ("Desktop Entry", "TryExec");
-					if (exec != null) {
-						if (!Path.is_absolute (exec)) {
-							if (Environment.find_program_in_path (exec) != null) {
+					if (kf.has_key ("Desktop Entry", "TryExec")) {
+						exec = kf.get_string ("Desktop Entry", "TryExec");
+						if (exec != null) {
+							if (Environment.find_program_in_path (exec) == null) {
 								message ("Can't find %s from TryExec key, aborting.", exec);
 								return; // Exec is not found in path => exit
 							}
-						}
-						else if (!FileUtils.test (exec, FileTest.IS_EXECUTABLE))
-						{
-							message ("%s from TryExec key is not executable, aborting.", exec);
-							return; // Exec is not executable => exit
 						}
 					}
 
@@ -100,7 +97,9 @@ class Autostart
 						warning ("Error: %s\n", e.message);
 					}
 				}
-				catch (KeyFileError e) {}
+				catch (KeyFileError e) {
+					warning ("KeyFileError: %s\n", e.message);
+				}
 			}
 		}
 		catch (FileError e) {
@@ -156,12 +155,3 @@ class Autostart
 		return 0;
 	}
 }
-
-
-
-
-
-
-
-
-
