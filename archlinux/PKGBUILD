@@ -8,25 +8,25 @@ pkgdesc="Openbox session tools"
 arch=('i686' 'x86_64')
 provides=("obsession")
 conflicts=("obsession")
-url=http://code.google.com/p/mimarchlinux/
+url=https://bitbucket.org/fabriceT/obsession
 license=('GPL')
 depends=('glib2' 'gtk2' 'dbus' 'systemd')
 optdepends=('xlockmore' 'lxdm' 'gdm')
-source=(hg+https://code.google.com/p/mimarchlinux.obsession/)
+source=(hg+https://bitbucket.org/fabriceT/$_pkgname)
 md5sums=('SKIP')
 
 pkgver() {
-  cd mimarchlinux.$_pkgname
+  cd $_pkgname
   echo $(hg identify -n).$(hg identify -i)
 }
 
 build() {
-  cd $srcdir/mimarchlinux.$_pkgname
+  cd $srcdir/$_pkgname
   make configure PREFIX=/usr/
   make
 }
 
 package() {
-  cd $srcdir/mimarchlinux.$_pkgname
+  cd $srcdir/$_pkgname
   make install PREFIX=$pkgdir/usr
 }
