@@ -21,12 +21,12 @@ pkgver() {
 }
 
 build() {
-  cd $srcdir/$_pkgname
+  cd "$srcdir/$_pkgname"
   make configure PREFIX=/usr/
   make
 }
 
 package() {
-  cd $srcdir/$_pkgname
+  cd "$srcdir/$_pkgname"
   make install PREFIX=$pkgdir/usr
 }
