@@ -30,10 +30,14 @@ typedef struct {
 	int hibernate;
 	int suspend;
 	int switch_user;
+	char *logout_cmd;
+	char *lock_cmd;
 } HandlerContext;
 
 void initialize_context (HandlerContext *);
-gboolean lock_screen(void);
+void free_context (HandlerContext *);
+void load_config (HandlerContext *);
+gboolean lock_screen(gchar *);
 gboolean verify_running(const char *, const char *);
 
 void system_suspend (HandlerContext *, GError *);
@@ -41,6 +45,5 @@ void system_hibernate (HandlerContext *, GError *);
 void system_reboot (HandlerContext *, GError *);
 void system_poweroff (HandlerContext *, GError *);
 void system_user_switch (HandlerContext *);
-
 
 #endif /* !OBSESSION_H */

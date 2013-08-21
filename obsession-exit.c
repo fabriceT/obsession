@@ -54,6 +54,8 @@ void get_capabilities (HandlerContext* handler_context)
 		g_print ("  User switch\n");
 	}
 
+	g_print ("Lock command: '%s'\n", handler_context->lock_cmd);
+	g_print ("Logout command: '%s'\n", handler_context->logout_cmd);
 }
 
 
@@ -93,56 +95,41 @@ int main(int argc, char* argv[])
 	if (capabilities)
 	{
 		get_capabilities (&handler_context);
-		return 0;
 	}
-
-	if (hibernate)
+	else if (hibernate)
 	{
 		system_hibernate (&handler_context, err);
 		if (err)
-		{
-			g_print ("error %s\n", err->message);
-			g_error_free (err);
-			return 1;
-		}
-		return 0;
+			goto _error;
 	}
-
-	if (poweroff)
+	else 	if (poweroff)
 	{
 		system_poweroff (&handler_context, err);
 		if (err)
-		{
-			g_print ("error %s\n", err->message);
-			g_error_free (err);
-			return 1;
-		}
-		return 0;
+			goto _error;
 	}
-
-	if (suspend)
+	else if (suspend)
 	{
 		system_suspend (&handler_context, err);
 		if (err)
-		{
-			g_print ("error %s\n", err->message);
-			g_error_free (err);
-			return 1;
-		}
-		return 0;
+			goto _error;
 	}
-
-	if (reboot)
+	else if (reboot)
 	{
 		system_reboot (&handler_context, err);
 		if (err)
-		{
-			g_print ("error %s\n", err->message);
-			g_error_free (err);
-			return 1;
-		}
-		return 0;
+			goto _error;
 	}
+
+	/* We have done with it */
+	free_context (&handler_context);
+	return 0;
+
+_error:
+	g_print ("error %s\n", err->message);
+	g_error_free (err);
+	free_context (&handler_context);
+	return 1;
 
 	return 1;
 }

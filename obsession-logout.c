@@ -58,7 +58,7 @@ gboolean expose_event(GtkWidget * widget, GdkEventExpose * event, GdkPixbuf * pi
 static void logout_clicked(GtkButton * button, HandlerContext * handler_context)
 {
 	/* kill(handler_context->lxsession_pid, SIGTERM); */
-	g_spawn_command_line_async("openbox --exit", NULL);
+	g_spawn_command_line_async(handler_context->logout_cmd, NULL);
 	gtk_main_quit();
 }
 

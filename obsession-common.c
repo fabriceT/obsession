@@ -113,16 +113,25 @@ void initialize_context (HandlerContext* handler_context)
 	}
 	else
 		handler_context->switch_user = NONE;
+
+	load_config (handler_context);
 }
 
+/* Free allocated memory from handler context */
+void free_context (HandlerContext* handler_context)
+{
+	g_free (handler_context->logout_cmd);
+	g_free (handler_context->lock_cmd);
+}
 
 /* Try to run xlock command in order to lock the screen, return TRUE on
  * success, FALSE if command execution failed
  */
-gboolean lock_screen(void)
+gboolean lock_screen(gchar *cmd)
 {
+	g_message ("Screen lock: %s", cmd);
 	// TODO: use of `gnome-screensaver-command -l`
-	if (!g_spawn_command_line_async("xlock -mode blank", NULL))
+	if (!g_spawn_command_line_async(cmd, NULL))
 	{
 		return TRUE;
 	}
@@ -189,12 +198,12 @@ void system_suspend (HandlerContext* handler_context, GError *err)
 	switch (handler_context->suspend)
 	{
 		case SYSTEMD:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			dbus_systemd_Suspend (&err);
 			break;
 
 		case UPOWER:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			dbus_UPower_Suspend (&err);
 			break;
 
@@ -209,12 +218,12 @@ void system_hibernate (HandlerContext* handler_context, GError *err)
 	switch (handler_context->hibernate)
 	{
 		case SYSTEMD:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			dbus_systemd_Hibernate (&err);
 			break;
 
 		case UPOWER:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			dbus_UPower_Hibernate (&err);
 			break;
 
@@ -269,17 +278,17 @@ void system_user_switch (HandlerContext* handler_context)
 			break;
 
 		case GDM:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			g_spawn_command_line_sync("gdmflexiserver --startnew", NULL, NULL, NULL, NULL);
 			break;
 
 		case KDM:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			g_spawn_command_line_sync("kdmctl reserve", NULL, NULL, NULL, NULL);
 			break;
 
 		case LIGHTDM:
-			lock_screen();
+			lock_screen(handler_context->lock_cmd);
 			g_spawn_command_line_sync("dm-tool switch-to-greeter", NULL, NULL, NULL, NULL);
 			break;
 
@@ -288,3 +297,58 @@ void system_user_switch (HandlerContext* handler_context)
 	}
 }
 
+
+gchar *get_default_lock_cmd (void)
+{
+	return g_strdup ("xlock -mode blank");
+}
+
+
+gchar *get_default_logout_cmd (void)
+{
+	return g_strdup ("openbox --exit");
+}
+
+
+void load_config (HandlerContext* handler_context)
+{
+	GError *error = NULL;
+	gchar *pathname = g_build_filename (g_get_user_config_dir(), "obsession.conf", NULL);
+
+	GKeyFile *kf = g_key_file_new ();
+	if (g_key_file_load_from_file (kf, pathname, G_KEY_FILE_KEEP_COMMENTS, &error))
+	{
+		handler_context->lock_cmd = g_key_file_get_string (kf, "Session", "screenlock", NULL);
+		handler_context->logout_cmd = g_key_file_get_string (kf, "Session", "logout", NULL);
+
+		/* Set default value if any */
+		if (handler_context->lock_cmd == NULL)
+			handler_context->lock_cmd = get_default_lock_cmd ();
+
+		if (handler_context->logout_cmd == NULL)
+			handler_context->logout_cmd = get_default_logout_cmd ();
+	}
+	else
+	{
+		// get default configuration.
+		handler_context->lock_cmd = get_default_lock_cmd ();
+		handler_context->logout_cmd = get_default_logout_cmd ();
+
+		// The config file doesn't exist. We create it.
+		if (error != NULL && error->code == G_FILE_ERROR_NOENT)
+		{
+			g_key_file_set_string (kf, "Session", "screenlock", handler_context->lock_cmd);
+			g_key_file_set_string (kf, "Session", "logout", handler_context->logout_cmd);
+			gchar *content = g_key_file_to_data (kf, NULL, NULL);
+			g_file_set_contents (pathname, content, -1, NULL);
+			g_free (content);
+		}
+	}
+
+	/* free error if needed */
+	if (error)
+		g_error_free (error);
+
+	g_key_file_free (kf);
+	g_free (pathname);
+}
