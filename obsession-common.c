@@ -33,7 +33,7 @@ static GQuark OBSESSION_ERROR;
  */
 void initialize_context (HandlerContext* handler_context)
 {
-	memset(handler_context, 0, sizeof(handler_context));
+	memset(handler_context, 0, sizeof(HandlerContext));
 
 	OBSESSION_ERROR = g_quark_from_string ("__obsession_error__");
 
