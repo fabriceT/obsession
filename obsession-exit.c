@@ -130,6 +130,4 @@ _error:
 	g_error_free (err);
 	free_context (&handler_context);
 	return 1;
-
-	return 1;
 }
