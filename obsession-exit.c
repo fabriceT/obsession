@@ -78,7 +78,10 @@ int main(int argc, char* argv[])
 		{ NULL }
 	};
 
-	g_type_init ();
+#if GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 36
+		g_type_init ();
+#endif
+
 	initialize_context (&handler_context);
 
 	GOptionContext * context = g_option_context_new ("");

@@ -129,7 +129,7 @@ void free_context (HandlerContext* handler_context)
  */
 gboolean lock_screen(gchar *cmd)
 {
-	g_return_val_if_fail (cmd != NULL, FALSE)
+	g_return_val_if_fail (cmd != NULL, FALSE);
 
 	if (!g_spawn_command_line_async(cmd, NULL))
 	{
