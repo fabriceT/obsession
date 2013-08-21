@@ -39,3 +39,13 @@ an openbox session managment. You are free to use it or not. If you do
 then comment the line calling openbox-xdg-autostart in the
 /usr/lib/openbox/openbox-autostart file.
 
+# Configuration
+
+the programs obsession-logout and obsession-exit uses a configuration file
+named obsession.conf. This file is automatically created in the .config
+directory located in the user home.
+
+The key `screenlock` sets the screen lock command. The key `logout` defines
+the logout command. Their respective default values are `xlock -mode blank`
+and `openbox --exit`.
+
