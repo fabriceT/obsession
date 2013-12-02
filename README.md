@@ -31,7 +31,7 @@ Yes, it does. Dana have done a god job.
 The default Openbox session launches openbox-autostart which launches
 openbox-xdg-autostart, a python script. This script requires python-xdg
 library to run and, of course, python. The python-xdg dependency is
-sometimes missed by packagers, so Openbox may or may not autostarts
+sometimes missed by packagers, so Openbox may or may not autostart
 programs. Xdg-autostart doesn't have this problem.
 
 It was fun to code an autostart program, and it had to be included in
