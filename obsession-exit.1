@@ -1,0 +1,44 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" (C) Copyright 2014 Fabien Givors <f+debian@chezlefab.net>,
+.\"
+.TH OBSESSION-EXIT 1 "February 13, 2014"
+.SH NAME
+obsession-exit \- Command-line session management helper for lightweight
+environments
+.SH SYNOPSIS
+.B obsession-exit
+.RI [ option ]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B obsession-exit
+command.
+.PP
+\fBobsession-exit\fP is a program that allows you to exit your session, suspend
+your computer or restart it from a simple command line.
+.SH OPTIONS
+This program follows the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-p, \-\-poweroff
+Shutdown the computer.
+.TP
+.B \-s, \-\-suspend
+Suspend the computer.
+.TP
+.B \-H, \-\-hibernate
+Go to Hibernation.
+.TP
+.B \-r, \-\-reboot
+Restart the computer.
+.TP
+.B \-c, \-\-capabilities
+List power capabilities.
+.SH SEE ALSO
+.BR obsession-logout (1),
+.BR xdg-autostart (1).
+.br
+See the README.md for more information.

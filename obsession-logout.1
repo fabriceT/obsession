@@ -1,0 +1,47 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" (C) Copyright 2014 Fabien Givors <f+debian@chezlefab.net>,
+.\"
+.TH OBSESSION-LOGOUT 1 "February 13, 2014"
+.SH NAME
+obsession-logout \- Graphical session management helper for lightweight
+environments
+.SH SYNOPSIS
+.B obsession-logout
+.RI [ option ]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B obsession-logout
+command.
+.PP
+\fBobsession-logout\fP is a program that allows you to exit your session, suspend
+your computer or restart it from a nice graphical interface.
+.SH OPTIONS
+This program follows the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-\-help-all
+Show all help options.
+.TP
+.B \-\-help-gtk
+Show GTK+ help options.
+.TP
+.B \-p, \-\-prompt=message
+Custom message to show on the dialog.
+.TP
+.B \-b, \-\-banner=image_file
+Banner to show on the dialog.
+.TP
+.B \-s, \-\-side=[\fBtop\fP | \fBleft\fP | \fBright\fP | \fBbottom\fP ]
+Position of the banner.
+.TP
+.B \-\-display=DISPLAY
+X display to use.
+.SH SEE ALSO
+.BR obsession-exit (1),
+.BR xdg-autostart (1).
+.br
+See the README.md for more information.

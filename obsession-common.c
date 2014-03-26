@@ -1,11 +1,12 @@
 /**
- * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr>.
- * Copyright (c) 2010    LxDE Developers, see the file AUTHORS for details.
+ * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr> (GPL-3+).
+ * Copyright (c) 2010-2011 Hong Jen Yee (aka PCMan) <pcman.tw@gmail.com>
+ * (GPL-2+).
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or any
- * later version. See http://www.gnu.org/copyleft/lgpl.html the full text
+ * later version. See http://www.gnu.org/copyleft/gpl.html the full text
  * of the license.
  *
  * This program is distributed in the hope that it will be useful,
@@ -38,13 +39,13 @@ void initialize_context (HandlerContext* handler_context)
 	OBSESSION_ERROR = g_quark_from_string ("__obsession_error__");
 
 	/* Is poweroff controlled by systemd or ConsolKit? */
-	if (dbus_systemd_CanPowerOff())
-	{
-		handler_context->poweroff = SYSTEMD;
-	}
-	else if (dbus_ConsoleKit_CanStop())
+	if (dbus_ConsoleKit_CanStop())
 	{
 		handler_context->poweroff = CONSOLEKIT;
+	}
+	else if (dbus_systemd_CanPowerOff())
+	{
+		handler_context->poweroff = SYSTEMD;
 	}
 	else
 		handler_context->poweroff = NONE;
@@ -64,13 +65,13 @@ void initialize_context (HandlerContext* handler_context)
 	}
 
 	/* Is suspend controlled by systemd or UPower? */
-	if (dbus_systemd_CanSuspend())
-	{
-		handler_context->suspend = SYSTEMD;
-	}
-	else if (dbus_UPower_CanSuspend())
+	if (dbus_UPower_CanSuspend())
 	{
 		handler_context->suspend = UPOWER;
+	}
+	else if (dbus_systemd_CanSuspend())
+	{
+		handler_context->suspend = SYSTEMD;
 	}
 	else
 	{
@@ -78,13 +79,13 @@ void initialize_context (HandlerContext* handler_context)
 	}
 
 	/* Is hibernation controlled by systemd or UPower? */
-	if (dbus_systemd_CanHibernate())
-	{
-		handler_context->hibernate = SYSTEMD;
-	}
-	else if (dbus_UPower_CanHibernate())
+	if (dbus_UPower_CanHibernate())
 	{
 		handler_context->hibernate = UPOWER;
+	}
+	else if (dbus_systemd_CanHibernate())
+	{
+		handler_context->hibernate = SYSTEMD;
 	}
 	else
 	{

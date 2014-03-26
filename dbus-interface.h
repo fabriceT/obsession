@@ -1,6 +1,7 @@
 /**
- * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr>.
- * Copyright (c) 2010 LxDE Developers, see the file AUTHORS for details.
+ * Copyright (c) 2011-2013 Fabrice THIROUX <fabrice.thiroux@free.fr> (GPL-3+).
+ * Copyright (c) 2010-2011 Hong Jen Yee (aka PCMan) <pcman.tw@gmail.com>
+ * (GPL-2+)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

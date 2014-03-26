@@ -1,0 +1,36 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" (C) Copyright 2014 Fabien Givors <f+debian@chezlefab.net>,
+.\"
+.TH XDG-AUTOSTART 1 "February 13, 2014"
+.SH NAME
+xdg-autostart \- auto start programs as specified by Freedesktop.org
+.SH SYNOPSIS
+.B xdg-autostart
+.RI [ desktop-environment ]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B xdg-autostart
+command.
+.PP
+\fBxdg-autostart\fP is a helper that runs the programs defined in \fI/etc/xdg/autostart/\fP and \fI~/.config/autostart\fP (see FreeDesktop specification for autostarted programs).
+.br
+
+Add it to your ~/.openbox/autostart file and manage your session with
+lxsession-edit or other.
+
+
+your computer or restart it from a simple command line.
+.SH OPTIONS
+.TP
+This program can be given the following parameter:
+.I desktop-environment
+Sets your desktop name (e.g. \fBKDE\fP, \fBXFCE\fP, \fBROX\fP...). Please refer to this table:
+\fIhttp://standards.freedesktop.org/menu-spec/latest/apb.html\fP to get the
+name of desktops currently supported by the Freedesktop specification.
+
+By default, xdg-autostart uses Openbox as desktop name.
+.SH SEE ALSO
+.BR obsession-logout (1),
+.BR obsession-exit (1).
+.br
+See the README.md for more information.

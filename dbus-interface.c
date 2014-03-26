@@ -1,5 +1,6 @@
 /* Taken from LightDM and modified.
- * Copyright (C) 2012 Fabrice THIROUX <fabrice.thiroux@free.fr>.
+ * Copyright (C) 2012 Fabrice THIROUX <fabrice.thiroux@free.fr> (GPL-3+).
+ * Copyright (C) 2008-2011 Hong Jen Yee (aka PCMan) <pcman.tw@gmail.com> (GPL-2+).
  *
  **** License from former file (power.c) ****
  *
