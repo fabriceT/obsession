@@ -25,12 +25,12 @@ all: obsession-exit obsession-logout xdg-autostart $(I18N_MO)
 
 obsession-exit: obsession-exit.o dbus-interface.o obsession-common.o config.h
 	@echo "Building $@"
-	@$(CC) -o $@ $^ $(LDFLAGS)
+	@$(CC) -o $@ $(filter-out %.h,$^) $(LDFLAGS)
 	@strip -s $@
 
 obsession-logout: obsession-logout.o dbus-interface.o obsession-common.o config.h
 	@echo "Building $@"
-	@$(CC) -o $@ $^ $(LDFLAGS)
+	@$(CC) -o $@ $(filter-out %.h,$^) $(LDFLAGS)
 	@strip -s $@
 
 xdg-autostart:  autostart/xdg-autostart.vala

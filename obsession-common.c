@@ -153,7 +153,7 @@ gboolean verify_running(const char * display_manager, const char * executable)
 
 		/* Form the filespec of the pid file for the display manager. */
 		char buffer[PATH_MAX];
-		sprintf(buffer, "/var/run/%s.pid", display_manager);
+		sprintf(buffer, "/run/%s.pid", display_manager);
 
 		/* Open the pid file. */
 		int fd = open(buffer, O_RDONLY);
