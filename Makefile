@@ -5,7 +5,7 @@ LOCALE_DIR=$(PREFIX)/share/locale
 
 
 # Building flags.
-CFLAGS ?=-march=i686 -mtune=generic -O2 -Wall
+CFLAGS ?=-march=native -mtune=generic -O2 -Wall
 VALAFLAGS:=$(foreach w,$(LDFLAGS) $(CFLAGS) $(CPPFLAGS),-X $(w))
 CFLAGS +=$(shell pkg-config --cflags gtk+-2.0 dbus-1 x11 gio-unix-2.0) -I.
 LDFLAGS+=$(shell pkg-config --libs gtk+-2.0 glib-2.0 dbus-1 x11 gio-unix-2.0)
