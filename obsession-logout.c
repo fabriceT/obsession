@@ -357,7 +357,7 @@ int main(int argc, char * argv[])
 	if (handler_context.reboot)
 	{
 		GtkWidget * reboot_button = gtk_button_new_with_mnemonic(_("_Reboot"));
-		GtkWidget * image = gtk_image_new_from_icon_name("gnome-session-reboot", GTK_ICON_SIZE_BUTTON);
+		GtkWidget * image = gtk_image_new_from_icon_name("system-restart", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(reboot_button), image);
 		gtk_button_set_alignment(GTK_BUTTON(reboot_button), 0.0, 0.5);
 		g_signal_connect(G_OBJECT(reboot_button), "clicked", G_CALLBACK(reboot_clicked), &handler_context);
@@ -368,7 +368,7 @@ int main(int argc, char * argv[])
 	if (handler_context.suspend)
 	{
 		GtkWidget * suspend_button = gtk_button_new_with_mnemonic(_("_Suspend"));
-		GtkWidget * image = gtk_image_new_from_icon_name("gnome-session-suspend", GTK_ICON_SIZE_BUTTON);
+		GtkWidget * image = gtk_image_new_from_icon_name("system-suspend", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(suspend_button), image);
 		gtk_button_set_alignment(GTK_BUTTON(suspend_button), 0.0, 0.5);
 		g_signal_connect(G_OBJECT(suspend_button), "clicked", G_CALLBACK(suspend_clicked), &handler_context);
@@ -379,7 +379,7 @@ int main(int argc, char * argv[])
 	if (handler_context.hibernate)
 	{
 		GtkWidget * hibernate_button = gtk_button_new_with_mnemonic(_("_Hibernate"));
-		GtkWidget * image = gtk_image_new_from_icon_name("gnome-session-hibernate", GTK_ICON_SIZE_BUTTON);
+		GtkWidget * image = gtk_image_new_from_icon_name("system-hibernate", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(hibernate_button), image);
 		gtk_button_set_alignment(GTK_BUTTON(hibernate_button), 0.0, 0.5);
 		g_signal_connect(G_OBJECT(hibernate_button), "clicked", G_CALLBACK(hibernate_clicked), &handler_context);
@@ -390,7 +390,7 @@ int main(int argc, char * argv[])
 	if (handler_context.switch_user)
 	{
 		GtkWidget * switch_user_button = gtk_button_new_with_mnemonic(_("S_witch User"));
-		GtkWidget * image = gtk_image_new_from_icon_name("gnome-session-switch", GTK_ICON_SIZE_BUTTON);
+		GtkWidget * image = gtk_image_new_from_icon_name("system-switch-user", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(switch_user_button), image);
 		gtk_button_set_alignment(GTK_BUTTON(switch_user_button), 0.0, 0.5);
 		g_signal_connect(G_OBJECT(switch_user_button), "clicked", G_CALLBACK(switch_user_clicked), &handler_context);
