@@ -15,7 +15,7 @@ LINGUAS= $(shell ls po/*.po)
 I18N_MO= $(LINGUAS:.po=.mo)
 
 
-all: obsession-exit obsession-logout xdg-autostart $(I18N_MO)
+all: obsession-exit obsession-logout $(I18N_MO)
 
 .SUFFIXES: .c
 
@@ -33,11 +33,6 @@ obsession-logout: obsession-logout.o dbus-interface.o obsession-common.o config.
 	@$(CC) -o $@ $(filter-out %.h,$^) $(LDFLAGS)
 	@strip -s $@
 
-xdg-autostart:  autostart/xdg-autostart.vala
-	@echo "Building $@"
-	@valac -o $@ $(VALAFLAGS) $^
-	@strip -s $@
-
 po/%.mo: po/%.po
 	msgfmt -o $@ $<
 
@@ -47,7 +42,7 @@ mrproper: clean
 	rm -f makefile.mk
 
 clean:
-	rm -f obsession-exit obsession-logout xdg-autostart *.o $(I18N_MO)
+	rm -f obsession-exit obsession-logout *.o $(I18N_MO)
 
 configure:
 	sed -i 's#define PREFIX.*#define PREFIX "$(PREFIX)"#' config.h
@@ -56,7 +51,6 @@ configure:
 install: all
 	install -D -m0755 obsession-exit   $(DESTDIR)$(PREFIX)/bin/obsession-exit
 	install -D -m0755 obsession-logout $(DESTDIR)$(PREFIX)/bin/obsession-logout
-	install -D -m0755 xdg-autostart    $(DESTDIR)$(PREFIX)/bin/xdg-autostart
 	# mo files.
 	for f in $(I18N_MO) ; do \
 		F=`basename $$f | sed 's/\.[^\.]*$$//'`;\
