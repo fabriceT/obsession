@@ -340,7 +340,7 @@ int main(int argc, char * argv[])
  		if (session_name == NULL)
 			session_name = "OpenBox"; // was LXDE
 
-		prompt = g_strdup_printf(_("<b><big>Logout %s session?</big></b>"), session_name);
+		prompt = g_strdup_printf(_("<b><big>Log out %s session?</big></b>"), session_name);
 	}
 	gtk_label_set_markup(GTK_LABEL(label), prompt);
 	gtk_box_pack_start(GTK_BOX(controls), label, FALSE, FALSE, 4);
