@@ -336,7 +336,10 @@ int main(int argc, char * argv[])
 	GtkWidget * label = gtk_label_new("");
 	if (prompt == NULL)
 	{
-		const char * session_name = "OpenBox"; // was LXDE
+	 	const char * session_name = g_getenv("DESKTOP_SESSION");
+ 		if (session_name == NULL)
+			session_name = "OpenBox"; // was LXDE
+
 		prompt = g_strdup_printf(_("<b><big>Logout %s session?</big></b>"), session_name);
 	}
 	gtk_label_set_markup(GTK_LABEL(label), prompt);
