@@ -23,6 +23,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gi18n.h>
 
 #include "config.h"
@@ -334,14 +335,9 @@ int main(int argc, char * argv[])
 
 	/* Create the label. */
 	GtkWidget * label = gtk_label_new("");
-	if (prompt == NULL)
-	{
-	 	const char * session_name = g_getenv("DESKTOP_SESSION");
- 		if (session_name == NULL)
-			session_name = "OpenBox"; // was LXDE
 
-		prompt = g_strdup_printf(_("<b><big>Log out %s session?</big></b>"), session_name);
-	}
+	prompt = g_strdup_printf ("<b><big>Log out of %s?</big></b>", session_get_name());
+
 	gtk_label_set_markup(GTK_LABEL(label), prompt);
 	gtk_box_pack_start(GTK_BOX(controls), label, FALSE, FALSE, 4);
 

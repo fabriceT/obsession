@@ -356,3 +356,37 @@ void load_config (HandlerContext* handler_context)
 	g_key_file_free (kf);
 	g_free (pathname);
 }
+
+const gchar *session_get_name()
+{
+	const gchar *session_name = g_getenv ("DESKTOP_SESSION");
+	if (session_name == NULL)
+		session_name = "Openbox";
+	else
+	{
+		const gchar *const *system_data_dirs = g_get_system_data_dirs ();
+		gchar *session_file_name = g_strdup_printf ("%s.desktop", session_name);
+		GKeyFile *session_key_file = g_key_file_new ();
+		gint i;
+		for (i = 0; system_data_dirs[i]; i++)
+		{
+			gchar *session_file_path = g_build_filename (system_data_dirs[i], "xsessions", session_file_name, NULL);
+			if (g_file_test (session_file_path, G_FILE_TEST_EXISTS))
+			{
+				g_key_file_load_from_file (session_key_file, session_file_path, G_KEY_FILE_NONE, NULL);
+				gchar *session_name_pretty = g_key_file_get_string (session_key_file, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_NAME, NULL);
+				if (session_name_pretty)
+				{
+					session_name = session_name_pretty;
+					g_free (session_file_path);
+					break;
+				}
+			}
+			g_free (session_file_path);
+		}
+		g_free (session_file_name);
+		g_key_file_free (session_key_file);
+	}
+
+	return session_name;
+}

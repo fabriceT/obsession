@@ -64,4 +64,6 @@ void system_reboot (HandlerContext *, GError *);
 void system_poweroff (HandlerContext *, GError *);
 void system_user_switch (HandlerContext *);
 
+const gchar *session_get_name();
+
 #endif /* !OBSESSION_H */

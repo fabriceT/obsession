@@ -26,33 +26,55 @@
 #include "obsession.h"
 #include "dbus-interface.h"
 
+const gchar *provider(int id)
+{
+	switch (id)
+	{
+		case UPOWER:
+			return "UPower";
+		case CONSOLEKIT:
+			return "Consolkit";
+		case SYSTEMD:
+			return "systemd";
+		case GDM:
+			return "GDM";
+		case KDM:
+			return "KDM";
+		case LIGHTDM:
+			return "LightDM";
+		case LXDM:
+			return "LXDM";
+		default:
+			return "Unknown";
+	}
+}
 
 void get_capabilities (HandlerContext* handler_context)
 {
 	g_print ("Capabilities:\n");
 	if (handler_context->poweroff != NONE)
 	{
-		g_print ("  Shutdown\n");
+		g_print ("  Shutdown : %s\n", provider(handler_context->poweroff));
 	}
 
 	if (handler_context->reboot != NONE)
 	{
-		g_print ("  Reboot\n");
+		g_print ("  Reboot: %s\n", provider(handler_context->reboot));
 	}
 
 	if (handler_context->suspend != NONE)
 	{
-		g_print ("  Suspend\n");
+		g_print ("  Suspend: %s\n", provider(handler_context->suspend));
 	}
 
 	if (handler_context->hibernate != NONE)
 	{
-		g_print ("  Hibernate\n");
+		g_print ("  Hibernate: %s\n", provider(handler_context->hibernate));
 	}
 
 	if (handler_context->switch_user != NONE)
 	{
-		g_print ("  User switch\n");
+		g_print ("  User switch: %s\n", provider(handler_context->switch_user));
 	}
 
 	g_print ("Lock command: '%s'\n", handler_context->lock_cmd);
