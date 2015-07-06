@@ -52,7 +52,6 @@ static void hibernate_clicked(GtkButton * button, HandlerContext * handler_conte
 static void switch_user_clicked(GtkButton * button, HandlerContext * handler_context);
 static void cancel_clicked(GtkButton * button, gpointer user_data);
 static GtkPositionType get_banner_position(void);
-static GdkPixbuf * get_background_pixbuf(void);
 gboolean expose_event(GtkWidget * widget, GdkEventExpose * event, GdkPixbuf * pixbuf);
 
 
@@ -157,54 +156,6 @@ static GtkPositionType get_banner_position(void)
 	return GTK_POS_LEFT;
 }
 
-/* Get the background pixbuf. */
-static GdkPixbuf * get_background_pixbuf(void)
-{
-	/* Get the root window pixmap. */
-	GdkScreen * screen = gdk_screen_get_default();
-#ifdef ENABLE_GTK3
-	GdkPixbuf * pixbuf = gdk_pixbuf_get_from_window(
-		gdk_get_default_root_window(),
-		0,
-		0,
-		gdk_screen_get_width(screen),		/* Width */
-		gdk_screen_get_height(screen));		/* Height */
-#else
-	GdkPixbuf * pixbuf = gdk_pixbuf_get_from_drawable(
-		NULL,					/* Allocate a new pixbuf */
-		gdk_get_default_root_window(),		/* The drawable */
-		NULL,					/* Its colormap */
-		0, 0, 0, 0,				/* Coordinates */
-		gdk_screen_get_width(screen),		/* Width */
-		gdk_screen_get_height(screen));		/* Height */
-#endif
-
-	/* Make the background darker. */
-	if (pixbuf != NULL)
-	{
-		unsigned char * pixels = gdk_pixbuf_get_pixels(pixbuf);
-		int width = gdk_pixbuf_get_width(pixbuf);
-		int height = gdk_pixbuf_get_height(pixbuf);
-		int pixel_stride = ((gdk_pixbuf_get_has_alpha(pixbuf)) ? 4 : 3);
-		int row_stride = gdk_pixbuf_get_rowstride(pixbuf);
-		int y;
-		for (y = 0; y < height; y += 1)
-		{
-			unsigned char * p = pixels;
-			int x;
-			for (x = 0; x < width; x += 1)
-			{
-				p[0] = p[0] / 2;
-				p[1] = p[1] / 2;
-				p[2] = p[2] / 2;
-				p += pixel_stride;
-			}
-			pixels += row_stride;
-		}
-	}
-	return pixbuf;
-}
-
 /* Handler for "expose_event" on background. */
 gboolean expose_event(GtkWidget * widget, GdkEventExpose * event, GdkPixbuf * pixbuf)
 {
@@ -260,17 +211,10 @@ int main(int argc, char * argv[])
 	/* Make the button images accessible. */
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), PACKAGE_DATA_DIR "/obsession/images");
 
-	/* Get the background pixbuf. */
-	GdkPixbuf * pixbuf = get_background_pixbuf();
-
 	/* Create the toplevel window. */
 	GtkWidget * window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
-	gtk_window_fullscreen(GTK_WINDOW(window));
-	GdkScreen* screen = gtk_widget_get_screen(window);
-	gtk_window_set_default_size(GTK_WINDOW(window), gdk_screen_get_width(screen), gdk_screen_get_height(screen));
-	gtk_widget_set_app_paintable(window, TRUE);
-	g_signal_connect(G_OBJECT(window), "expose_event", G_CALLBACK(expose_event), pixbuf);
+	gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
 	/* Toplevel container */
 	GtkWidget* alignment = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
