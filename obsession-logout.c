@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "config.h"
 #include "dbus-interface.h"
@@ -141,6 +142,17 @@ static void cancel_clicked(GtkButton * button, gpointer user_data)
 	gtk_main_quit();
 }
 
+/* Handler for "Escape" key pressed.
+ * https://stackoverflow.com/questions/17740771/how-to-program-window-to-close-with-escape-key */
+static gboolean check_escape(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+  if (event->keyval == GDK_KEY_Escape) {
+    gtk_main_quit();
+    return TRUE;
+  }
+  return FALSE;
+}
+
 /* Convert the --side parameter to a GtkPositionType. */
 static GtkPositionType get_banner_position(void)
 {
@@ -155,6 +167,8 @@ static GtkPositionType get_banner_position(void)
 	}
 	return GTK_POS_LEFT;
 }
+
+
 
 /* Handler for "expose_event" on background. */
 gboolean expose_event(GtkWidget * widget, GdkEventExpose * event, GdkPixbuf * pixbuf)
@@ -358,6 +372,8 @@ int main(int argc, char * argv[])
 	handler_context.error_label = gtk_label_new("");
 	gtk_label_set_justify(GTK_LABEL(handler_context.error_label), GTK_JUSTIFY_CENTER);
 	gtk_box_pack_start(GTK_BOX(controls), handler_context.error_label, FALSE, FALSE, 4);
+
+	g_signal_connect(window, "key_press_event", G_CALLBACK(check_escape), NULL);
 
 	/* Show everything. */
 	gtk_widget_show_all(window);
