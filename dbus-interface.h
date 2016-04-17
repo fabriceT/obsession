@@ -24,22 +24,30 @@
 
 #include <glib.h>
 
-/* Interface to ConsoleKit for shutdown and reboot. */
-extern gboolean dbus_ConsoleKit_CanStop(void);
-extern gboolean dbus_ConsoleKit_CanRestart(void);
-extern gboolean dbus_ConsoleKit_Stop(GError **);
-extern gboolean dbus_ConsoleKit_Restart(GError **);
+/* ConsoleKit Interface */
+extern gboolean dbus_ConsoleKit_CanPowerOff(void);
+extern gboolean dbus_ConsoleKit_CanReboot(void);
+extern gboolean dbus_ConsoleKit_CanHibernate(void);
+extern gboolean dbus_ConsoleKit_CanSuspend(void);
 
-/* Interface to UPower for suspend and hibernate. */
+extern void dbus_ConsoleKit_PowerOff(GError **);
+extern void dbus_ConsoleKit_Reboot(GError **);
+extern void dbus_ConsoleKit_Suspend(GError **);
+extern void dbus_ConsoleKit_Hibernate(GError **);
+
+/* UPower Interface */
 extern gboolean dbus_UPower_CanSuspend(void);
 extern gboolean dbus_UPower_CanHibernate(void);
+
 extern gboolean dbus_UPower_Suspend(GError **);
 extern gboolean dbus_UPower_Hibernate(GError **);
 
+/* SystemD Interface */
 extern gboolean dbus_systemd_CanPowerOff(void);
 extern gboolean dbus_systemd_CanReboot(void);
 extern gboolean dbus_systemd_CanSuspend(void);
 extern gboolean dbus_systemd_CanHibernate(void);
+
 extern void dbus_systemd_PowerOff(GError **);
 extern void dbus_systemd_Reboot(GError **);
 extern void dbus_systemd_Suspend(GError **);

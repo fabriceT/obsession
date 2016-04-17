@@ -38,8 +38,8 @@ void initialize_context (HandlerContext* handler_context)
 
 	OBSESSION_ERROR = g_quark_from_string ("__obsession_error__");
 
-	/* Is poweroff controlled by systemd or ConsolKit? */
-	if (dbus_ConsoleKit_CanStop())
+	/* Is poweroff controlled by systemd or ConsoleKit? */
+	if (dbus_ConsoleKit_CanPowerOff())
 	{
 		handler_context->poweroff = CONSOLEKIT;
 	}
@@ -50,12 +50,12 @@ void initialize_context (HandlerContext* handler_context)
 	else
 		handler_context->poweroff = NONE;
 
-	/* Is reboot controlled by systemd or ConsolKit? */
+	/* Is reboot controlled by systemd or ConsoleKit? */
 	if (dbus_systemd_CanReboot())
 	{
 		handler_context->reboot = SYSTEMD;
 	}
-	else if (dbus_ConsoleKit_CanRestart())
+	else if (dbus_ConsoleKit_CanReboot())
 	{
 		handler_context->reboot = CONSOLEKIT;
 	}
@@ -246,7 +246,7 @@ void system_reboot (HandlerContext* handler_context, GError *err)
 			break;
 
 		case CONSOLEKIT:
-			dbus_ConsoleKit_Restart (&err);
+			dbus_ConsoleKit_Reboot (&err);
 			break;
 
 		default:
@@ -264,7 +264,7 @@ void system_poweroff (HandlerContext* handler_context, GError *err)
 			break;
 
 		case CONSOLEKIT:
-			dbus_ConsoleKit_Stop (&err);
+			dbus_ConsoleKit_PowerOff (&err);
 			break;
 
 		default:
