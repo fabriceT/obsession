@@ -73,6 +73,10 @@ void initialize_context (HandlerContext* handler_context)
 	{
 		handler_context->suspend = SYSTEMD;
 	}
+	else if (dbus_ConsoleKit_CanSuspend())
+	{
+		handler_context->suspend = CONSOLEKIT;
+	}
 	else
 	{
 		handler_context->suspend = NONE;
@@ -82,6 +86,10 @@ void initialize_context (HandlerContext* handler_context)
 	if (dbus_UPower_CanHibernate())
 	{
 		handler_context->hibernate = UPOWER;
+	}
+		else if (dbus_ConsoleKit_CanHibernate())
+	{
+		handler_context->hibernate = CONSOLEKIT;
 	}
 	else if (dbus_systemd_CanHibernate())
 	{
