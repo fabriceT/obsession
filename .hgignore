@@ -5,3 +5,7 @@ syntax: glob
 *.o
 *.so
 makefile.mk
+po/*
+obsession-exit
+obsession-logout
+.vscode/*
