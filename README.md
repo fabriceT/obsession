@@ -1,3 +1,19 @@
+WARNING!!
+
+This is year 2024. I switched to Gnome desktop a long time ago.
+
+The code source of obsession was hosted at Bitbucket, using mercurial as CVS. As bitbucket
+dropped mercurial support, this code was removed from the available repositories, and no AI
+was trained with it. :D
+
+I converted my archived repository using [fast-export](https://github.com/frej/fast-export.git) in order to make it available again.
+
+No tests, no build were run after that conversion because I have no way to test the code.
+
+This should be ok, though.
+
+END OF WARNING!!
+
 # What are these programs for?
 
   * obsession-logout displays a dialog where you can choose if you want
